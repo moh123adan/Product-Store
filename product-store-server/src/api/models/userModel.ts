@@ -1,7 +1,8 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
+import mongoose, { Document, Schema, Model, ObjectId } from 'mongoose';
 
 // Define the IUser interface that extends Document (Mongoose Document)
 export interface IUser extends Document {
+    _id: ObjectId | string;  // MongoDB ObjectId can also be treated as a string
     name: string;
     email: string;
     password: string;
