@@ -21,6 +21,8 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<v
   const { name, email, password, password_confirm, isAdmin } = req.body;
   const profilePicture = req.file ? req.file.path : null;
 
+  console.log(profilePicture)
+
   // Check if user already exists
   const exists: IUser | null = await User.findOne({ email });
   if (exists) {
