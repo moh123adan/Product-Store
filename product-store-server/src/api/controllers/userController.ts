@@ -67,8 +67,9 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<v
   });
 });
 
+
 // Login user
-const loginUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const user: IUser | null = await User.findOne({ email });
 
