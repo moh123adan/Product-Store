@@ -74,17 +74,20 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
   const user: IUser | null = await User.findOne({ email });
 
   if (!user) {
-    return res.status(400).json({ success: false, message: 'User does not exist' });
+    res.status(400).json({ success: false, message: 'User does not exist' });
+    return;
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(400).json({ success: false, message: 'Invalid credentials' });
+    res.status(400).json({ success: false, message: 'Invalid credentials' });
+    return;
   }
 
   const token = createToken(user._id.toString(), user.isAdmin);
-  return res.json({
+  
+  res.json({
     success: true,
     user: {
       _id: user._id,
