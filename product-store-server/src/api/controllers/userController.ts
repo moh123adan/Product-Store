@@ -86,7 +86,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
   }
 
   const token = createToken(user._id.toString(), user.isAdmin);
-  
+
   res.json({
     success: true,
     user: {
@@ -100,7 +100,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
 });
 
 // Google login user
-const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { tokenId } = req.body;
 
   try {
@@ -111,7 +111,8 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
 
     const payload = ticket.getPayload();
     if (!payload) {
-      return res.status(400).json({ success: false, message: 'Invalid Google token' });
+      res.status(400).json({ success: false, message: 'Invalid Google token' });
+      return;
     }
 
     const { sub, email, name } = payload;
@@ -125,7 +126,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
 
     const token = createToken(user._id.toString(), user.isAdmin);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       user: {
         _id: user._id,
@@ -137,9 +138,10 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
     });
   } catch (error) {
     console.error(error);
-    return res.status(401).json({ success: false, message: 'Invalid token' });
+    res.status(401).json({ success: false, message: 'Invalid token' });
   }
 });
+
 
 export {
   registerUser, loginUser, googleLogin,
