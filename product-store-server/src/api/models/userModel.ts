@@ -1,37 +1,26 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
+// Define the IUser interface that extends Document (Mongoose Document)
 export interface IUser extends Document {
-    username: string;
+    name: string;
+    email: string;
     password: string;
-    comparePassword: (password: string) => Promise<boolean>;
+    profilePicture?: string;
+    isAdmin: boolean;
+    googleId?: string;
 }
 
-const UserSchema: Schema<IUser> = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
+// Mongoose schema
+const userSchema: Schema<IUser> = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    profilePicture: { type: String },
+    isAdmin: { type: Boolean, default: false },
+    googleId: { type: String },
 });
 
-UserSchema.pre<IUser>('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-});
-
-UserSchema.methods.comparePassword = function (password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password);
-};
-
-const User = mongoose.model<IUser>('User', UserSchema);
+// Create the user model
+const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
 export default User;
