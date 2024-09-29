@@ -1,5 +1,5 @@
-import nodemailer, { Transporter } from 'nodemailer';
 import expressAsyncHandler from 'express-async-handler';
+import nodemailer, { Transporter } from 'nodemailer';
 import { IUser } from '../models/userModel'; // Assuming IUser is your user interface
 
 const sendPasswordResetEmail = expressAsyncHandler(async (user: IUser, resetToken: string): Promise<void> => {
@@ -60,3 +60,4 @@ const sendPasswordResetEmail = expressAsyncHandler(async (user: IUser, resetToke
 });
 
 export { sendPasswordResetEmail };
+
